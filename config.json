@@ -1,0 +1,20 @@
+{
+    "spotify": {
+        "client_id": "id123",
+        "client_secret": "secret123"
+    },
+    "tonies": {
+        "username": "test",
+        "password": "secret"
+    },
+    "PlaylistSync": {
+        "household1ID": {
+            "playlist1URI": "tonie1ID",
+            "playlist2URI": "tonie2ID"
+        },
+        "household2ID": {
+            "playlist3URI": "tonie3ID",
+            "playlist4URI": "tonie4ID"
+        }
+    }
+}
