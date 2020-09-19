@@ -1,0 +1,13 @@
+version: "3.4"
+
+services:
+    TonieboxSync:
+        image: tonie-sync:0.1
+        container_name: "TonieboxSync"
+        restart: "no"
+        volumes:
+            - "./sync:/sync"
+        environment:
+            - TZ=Europe/Berlin
+            - TONIEBOX_SYNC_LOGLEVEL=INFO
+            - TONIEBOX_SYNC_INTERVAL=5
