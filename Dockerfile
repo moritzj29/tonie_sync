@@ -15,7 +15,6 @@ RUN git clone https://github.com/moritzj29/tonie_sync
 RUN pip install ./tonie_api
 RUN pip install ./tonie_sync
 
-ADD start.py .
 ARG TONIEBOX_SYNC_LOGLEVEL="INFO"
 ARG TONIEBOX_SYNC_INTERVAL=5
 
