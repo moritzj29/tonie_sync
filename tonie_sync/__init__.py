@@ -1,1 +1,1 @@
-from .sync import TonieSpotifySync
+from .sync import *

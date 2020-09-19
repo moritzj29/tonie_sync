@@ -12,6 +12,23 @@ log.addHandler(logging.NullHandler())
 
 
 class TonieSpotifySync():
+    """Sync spotify content to toniecloud.
+
+    :param directory: directory of config file and media storage. 
+                      Defaults to current working directory.
+    :type dictionary: str, optional
+    :param config_from_file: load config from file. Defaults to True.
+    :type config_from_file: bool, optional
+    :param username: toniecloud username. Defaults to None.
+    :type username: str, optional
+    :param password: toniecloud password. Defaults to None.
+    :type password: str, optional
+    :param client_id: Spotify clientID. Defaults to None.
+    :type client_id: str, optional
+    :param client_secret: Spotify client secret. Defaults to None.
+    :type client_secret: str, optional
+    """
+
     def __init__(self, directory=os.getcwd(), config_from_file=True,
                  username=None, password=None,
                  client_id=None, client_secret=None):
@@ -55,29 +72,30 @@ class TonieSpotifySync():
 
     def _load_config(self, name='config.json'):
         """Load configuration file from disk. Configuration file
-        has to be in JSON format. Entries ``spotify`` and ``tonies``
+        has to be in JSON format. Entries `spotify` and `tonies`
         are mandatory.
 
         Example:
 
         .. code-block:: json
+
             {
-                'spotify': {
-                    'client_id': 'id123',
-                    'client_secret': 'secret123'
+                "spotify": {
+                    "client_id": "id123",
+                    "client_secret": "secret123"
                 },
-                'tonies': {
-                    'username': 'test',
-                    'password': 'secret'
+                "tonies": {
+                    "username": "test",
+                    "password": "secret"
                 },
-                'PlaylistSync': {
-                    'household1ID': {
-                        'playlist1URI': 'tonie1ID',
-                        'playlist2URI': 'tonie2ID'
+                "PlaylistSync": {
+                    "household1ID": {
+                        "playlist1URI": "tonie1ID",
+                        "playlist2URI": "tonie2ID"
                     },
-                    'household2ID': {
-                        'playlist3URI': 'tonie3ID',
-                        'playlist4URI': 'tonie4ID'
+                    "household2ID": {
+                        "playlist3URI": "tonie3ID",
+                        "playlist4URI": "tonie4ID"
                     }
                 }
             }
@@ -124,12 +142,12 @@ class TonieSpotifySync():
         log.info('Finished running all sync jobs...')
         self._sync_running = False
 
-    def start_sync_service(self, sleep=5, background=True):
+    def start_sync_service(self, sleeptime=5, background=True):
         """Run sync jobs regularly with a defined break
         time between.
 
-        :param sleep: time between sync runs in min, defaults to 5
-        :type sleep: int, optional
+        :param sleeptime: time between sync runs in min, defaults to 5
+        :type sleeptime: int, optional
         :param background: run sync in separate thread,
                            defaults to True
         :type background: bool, optional
@@ -143,12 +161,12 @@ class TonieSpotifySync():
         log.info(f'Starting sync service with {sleep} minute breaks.')
 
         # define worker
-        def sync_worker(self=self, sleep=sleep):
+        def sync_worker(self=self, sleeptime=sleeptime):
             self._sync_continuous = True
             while self._sync_continuous:
                 self.run_syncs()
                 # check loop condition every 10s
-                for _ in range(0, int(sleep*60/10)):
+                for _ in range(0, int(sleeptime*60/10)):
                     sleep(10)
                     if not self._sync_continuous:
                         break
@@ -157,8 +175,8 @@ class TonieSpotifySync():
             # start service
             self._sync_thread.start()
         else:
-            sync_worker()
             print('Started sync service, interrupt with Ctrl+C.')
+            sync_worker()
 
     def stop_sync_service(self):
         """Stop sync service, if ran in separate thread.
@@ -172,16 +190,17 @@ class TonieSpotifySync():
 
 
 class PlaylistSync():
-    def __init__(self, parent, playlistURI, tonie):
-        """Sync Spotify playlist to creative tonie.
+    """Sync Spotify playlist to creative tonie.
 
-        :param parent: instance of main sync class
-        :type parent: class:TonieSpotifySync
-        :param playlistURI: URI of the Spotify playlist
-        :type playlistURI: str
-        :param tonie: Creative Tonie instance
-        :type tonie: class:TonieAPI._CreativeTonie
-        """
+    :param parent: instance of main sync class
+    :type parent: class:TonieSpotifySync
+    :param playlistURI: URI of the Spotify playlist
+    :type playlistURI: str
+    :param tonie: Creative Tonie instance
+    :type tonie: class:TonieAPI._CreativeTonie
+    """
+
+    def __init__(self, parent, playlistURI, tonie):
         self.URI = playlistURI
         self.tonie = tonie
         self.sp_handler = parent.sp_handler
@@ -287,7 +306,7 @@ class PlaylistSync():
         """Update Tonie contents to match folder content.
         Order tracks according to Spotify playlist.
         Write file with links between Spotify track URI and
-        Tonie's track ID to ``filelinks.json``.
+        Tonie's track ID to `filelinks.json`.
         """
         log.info('Updating tonie ...')
         # Link URI <-> contentID
