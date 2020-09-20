@@ -298,7 +298,7 @@ class PlaylistSync():
             data = self.tracks[uri]
             self.sp_handler.arguments["output_file"] = os.path.join(
                 self.directory, '{track-id}.{output-ext}')
-            self.sp_handler.download_track(uri)
+            self.sp_handler.download_track(f'spotify:track:{uri}')
             log.info(f'Downloaded track {data["name"]} ({uri}).')
         log.info('Finished updating files ...')
 
@@ -317,9 +317,10 @@ class PlaylistSync():
         update_filelinks_file = False
 
         for uri, data in self.tracks.items():
-            if uri not in self.filelinks.keys():
+            path = os.path.join(self.directory, f'{uri}.mp3')
+            if (uri not in self.filelinks.keys()) and os.path.exists(path):
                 contentid = self.tonie.upload(
-                    os.path.join(self.directory, f'{uri}.mp3'),
+                    path,
                     data['name']  # title
                 )
                 # set link between playlist URI and content ID
