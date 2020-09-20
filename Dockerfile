@@ -22,4 +22,4 @@ ARG TONIEBOX_SYNC_INTERVAL=5
 #
 # -u to not stop docker during time.sleep:
 # https://stackoverflow.com/questions/42223834/docker-stucks-when-executing-time-sleep1-in-a-python-loop
-CMD python -u /tonie/start.py --directory=/sync --loglevel=${TONIEBOX_SYNC_LOGLEVEL} --interval=${TONIEBOX_SYNC_INTERVAL}
+CMD python -u /tonie/tonie_sync/start.py --directory=/sync --loglevel=${TONIEBOX_SYNC_LOGLEVEL} --interval=${TONIEBOX_SYNC_INTERVAL}
